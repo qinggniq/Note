@@ -21,7 +21,7 @@
 | 代理协议| 代理服务器 | 代理端口 |
 | :--:  |   :--:|   :--:  |   :--:|   
 | SOCKS5| 127.0.0.1|1080|
-2. 规则列表输入网址[](https://raw.githubusercontent.com/calfzhou/autoproxy-gfwlist/trunk/gfwlist.txt)。
+2. 规则列表输入网址[gfwlist](https://raw.githubusercontent.com/calfzhou/autoproxy-gfwlist/trunk/gfwlist.txt)。
 ### 本机启动shadowsocks
 1. 命令行输入`sslocal  -d start -p {server_port} -k {password} - s {server_ip} -m {encrypt method} - l {local_port}`即可翻墙。
 ## 给GitHub添加公钥
