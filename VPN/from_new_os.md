@@ -9,8 +9,7 @@
 ### Chrome的安装
 过程略。
 ### shadowsocks的安装
-1. 可以先装一个`python` ，然后使用`sudo pip install shadowsocks`安装，然而`pip`里面的**shadowsocks**是有问题的，所以可以使用第二种方法。
-2. 使用`sudo apt install shadowsocks`安装ubuntu里面默认软件源的包。
+1. 使用`sudo apt install shadowsocks-libev`安装ubuntu里面默认软件源的包。这个包比原先的包支持更多的加密方式。
 ### SwitchOmega插件安装
 1. 用于在Chrome中设置代理的插件。
 2. 在Chrome Store里面可以安装，然而没有翻墙前是访问不了Chrome Store的，然而翻墙又需要这个插件，所以陷入了**鸡生蛋，蛋生鸡**的困局，应该离线下载这个插件。
