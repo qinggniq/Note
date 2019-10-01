@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "/home/qinggniq/Git/ucore_os_lab/labcodes/lab1"
+		},
+		{
+			"path": "/home/qinggniq/Git/Note/OS"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"mmu.h": "c",
+			"trap.h": "c",
+			"x86.h": "c",
+			"defs.h": "c",
+			"stdio.h": "c",
+			"memlayout.h": "c"
+		}
+	}
+}
