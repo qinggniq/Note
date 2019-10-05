@@ -5,11 +5,9 @@
 ### 答案
 `meld ./lab1 ./lab2`将`lab1`里面的做的练习的代码移到`lab2`里面去就行。
 ## 练习1：实现 first-fit 连续物理内存分配算法（需要编程）
-### 内容
+### 实验
 在实现first fit 内存分配算法的回收函数时，要考虑地址连续的空闲块之间的合并操作。提示:在建立空闲页块链表时，需要按照空闲页块起始地址来排序，形成一个有序的链表。可能会修改default_pmm.c中的default_init，default_init_memmap，default_alloc_pages， default_free_pages等相关函数。请仔细查看和理解default_pmm.c中的注释。
-请在实验报告中简要说明你的设计实现过程。请回答如下问题：
-你的first fit算法是否有进一步的改进空间
-
+请在实验报告中简要说明你的设计实现过程。
 ### 答案
 做练习一的主要内容就是理解页表项`Page`的结构
 ```c
@@ -99,47 +97,38 @@ default_free_pages(struct Page *base, size_t n) {
     base->property = n;
     SetPageProperty(base);
     list_entry_t *le = list_next(&free_list);
-	list_entry_t *nxt = NULL;
+	list_entry_t *nxt = &free_list;
     while (le != &free_list) {
         p = le2page(le, page_link);
         le = list_next(le);
+        cprintf("%08p\n", p);
         if (base + base->property == p) {
             base->property += p->property;
             p->property = 0;
             ClearPageProperty(p);
 			nxt = (p->page_link).next;
             list_del(&(p->page_link));
-        }
-        else if (p + p->property == base) {
+        } else if (p + p->property == base) {
             p->property += base->property;
             base->property = 0;
             ClearPageProperty(base);
             base = p;
 			nxt = (p->page_link).next;
             list_del(&(p->page_link));
-        }         
-    }
-    if (nxt == NULL) {
-        nxt = &free_list;
-        le = list_next(&free_list);
-         while (le != &free_list) {
-            p = le2page(le, page_link);
-            le = list_next(le);
-            if (base + base->property < p) {
-                nxt = le;
-                break;
-            }
-         }
+        } else if (base + base->property < p && nxt == NULL) {
+			nxt = le;
+            break;
+		}         
     }
     nr_free += n;
     list_add_before(nxt, &(base->page_link));
 }
 ```
-意思是如果合并了，那么就更新插入位置为新合并的那个位置，如果没有可以合并的，那么遍历列表去寻找合适的插入位置，由于`freelist`根据首地址排好了序，就找到第一个地址大于块尾地址的就行了。
+意思是如果合并了，那么就更新插入位置为新合并的那个位置，如果没有可以合并的，那么找到第一个合适的插入位置，由于`freelist`根据首地址排好了序，就找到第一个地址大于块尾地址的就行了。
 
 ## 练习2：实现寻找虚拟地址对应的页表项（需要编程）
 ### 实验
-请在实验报告中简要说明你的设计实现过程。请回答如下问题：
+请在实验报告中简要说明你的设计实现过程。
 ### 答案
 `get_pte(pde_t *pgdir, uintptr_t la, bool create)`函数是让我们根据**页表目录起始地址**和**线性地址**（虚拟地址）来得到此虚拟地址的**页表项(page table entry)**，要点就是要理解好**页目录项和页表项**里面的结构。[page_entry](https://github.com/qinggniq/Note/OS/ELF/format_of_page_entry.png)
 可以看到，高20位是页表地址/页框地址（注意里面是物理地址），低12位是标志位。我们通过页目录的起始地址可以知道改虚拟地址的二级页表所在的页目录项，通过`pde_t *pdep = &pgdir[PDX(la)]`。然后根据**PTE_P**标识位得知是否有对应的二级页表，如果没有，那么根据`create`标识是否需要新分配一个页来作为二级页表。新分配页表先给`page`设置一下页表引用计数，然后清理一下二级页表所在页的内容（因为后面的程序会根据页表项的**PTE_P**表示判断是不是有虚拟地址到物理地址的映射），最后设置一下页目录项的访问权限标识。最后根据二级页表的起始地址找到虚拟地址所在的页表项，返回即可。
@@ -169,6 +158,7 @@ get_pte(pde_t *pgdir, uintptr_t la, bool create) {
 ```
 ## 问答
 > 请描述页目录项（Page Directory Entry）和页表项（Page Table Entry）中每个组成部分的含义以及对ucore而言的潜在用处。
+
 | Bit Position | Contents | Use for uCore |
 | --| -- | -- |
 |0(p) | 存在位，用于表示页表项是否有效|  减小实际的页表所占空间  |
@@ -212,8 +202,12 @@ page_remove_pte(pde_t *pgdir, uintptr_t la, pte_t *ptep) {
 }
 ```
 ### 问答
-> 数据结构Page的全局变量（其实是一个数组）的每一项与页表中的页目录项和页表项有无对应关系？如果有，其对应关系是啥？
-有对应关系，基本就是线性映射，
+> 数据结构Page的全局变量（其实是一个数组）的每一项与页表中的页目录项和页表项有无对应关系？如果有，其对应关系是啥？ 
 
-> 如果希望虚拟地址与物理地址相等，则需要如何修改lab2，完成此事？ 鼓励通过编程来具体完成这个问题
+有对应关系，页表项或页目录项如果有**PTE_P**标志的话，那么其中存的物理地址左移12位就是对应的page结构。
+
+> 如果希望虚拟地址与物理地址相等，则需要如何修改lab2，完成此事？ 鼓励通过编程来具体完成这个问题 
+
 把那些物理地址转虚拟地址的宏用到的**KERNBASE**改成0即可。
+
+## Challenge 完成Buddy算法
