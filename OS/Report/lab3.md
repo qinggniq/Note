@@ -194,6 +194,7 @@ static int _extended_clock_swap_out_victim(struct mm_struct *mm,
   }
 }
 ```
+然而使用全局变量而不是`mm_area`去存下一个起始页的不好的地方在于当引入用户进程后，`mm_area`结构不止一个，那么可能A进程的页指向的是B进程的页，但是uCore原本用于存储需要换出页的链表`pra_page_link`好像就是全局的，也就没所谓了。
 ### 问答
 > 1. 需要被换出的页的特征是什么？
 

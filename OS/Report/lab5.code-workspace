@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "/home/qinggniq/Git/ucore_os_lab/labcodes/lab5"
+		},
+		{
+			"path": "/home/qinggniq/Git/Note/OS"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"typeinfo": "c"
+		}
+	}
+}
