@@ -77,7 +77,6 @@ dd if=bin/kernel of=bin/ucore.img seek=1 conv=notrunc
 ## 练习三
 ### BIOS将通过读取硬盘主引导扇区到内存，并转跳到对应内存中的位置执行bootloader。请分析bootloader是如何完成从实模式进入保护模式的。
 ```asm
-
 lgdt gdtdesc
     movl %cr0, %eax
     orl $CR0_PE_ON, %eax
@@ -187,3 +186,4 @@ ebp:0x7bf8 eip:0x7d72 args:0xc031fcfa 0xc08ed88e 0x64e4d08e 0xfa7502a8
 
 ## Challenge 1
 ### 扩展proj4,增加syscall功能，即增加一用户态函数（可执行一特定系统调用：获得时钟计数值），当内核初始完毕后，可从内核态返回到用户态的函数，而用户态的函数又通过系统调用得到内核态的服务（通过网络查询所需信息，可找老师咨询。如果完成，且有兴趣做代替考试的实验，可找老师商量）。需写出详细的设计和分析报告。完成出色的可获得适当加分。
+### 咕咕咕

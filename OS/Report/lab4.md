@@ -2,6 +2,7 @@
 ## 练习1：分配并初始化一个进程控制块（需要编码）
 ### 内容
 `alloc_proc`函数（位于`kern/process/proc.c`中）负责分配并返回一个新的`struct proc_struct`结构，用于存储新建立的内核线程的管理信息。ucore需要对这个结构进行最基本的初始化，你需要完成这个初始化过程。
+<!--more-->
 ### 答案
 ```c
 struct proc_struct {
