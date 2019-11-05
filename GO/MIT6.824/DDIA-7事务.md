@@ -48,7 +48,7 @@
 
 下图是一个计数器例子，由于竞态条件，最终结果不正确。
 
-![计数器的bug](https://raw.githubusercontent.com/qinggniq/Note/GO/MIT6.824/images/DDIA/8-Trasaction/由于写倾斜导致的bug.png)
+![计数器的bug](https://raw.githubusercontent.com/qinggniq/Note/master/GO/MIT6.824/imags/DDIA/8-Trasaction/由于写倾斜导致的bug.png)
 
 ACID语义中的隔离性意味着并发执行的多个事务相互隔离，它们不能交叉。经典的数据库教材把隔离性定义为可串行化（Linerable），这意味着可以假装它是数据库上运行的唯一事务。虽然实际上他们可能同时运行，但是数据库提交的时候，其结果和串行执行完全相同。
 
@@ -147,7 +147,7 @@ ACID语义中的隔离性意味着并发执行的多个事务相互隔离，它�
 
 为了实现快照基本隔离，数据库采用了一种类似于读-提交中防止脏读的机制。考虑到多个事务可能会在不同时间点查看数据库状态，所以**数据库机制保留了多个对象的不同提交版本**，这种技术也叫作**多版本并发控制**（MVCC）。
 
-![利用多版本技术实现快照隔离级别](https://raw.githubusercontent.com/qinggniq/Note/GO/MIT6.824/images/DDIA/8-Trasaction/利用多版本技术实现快照隔离级别.png)
+![利用多版本技术实现快照隔离级别](https://raw.githubusercontent.com/qinggniq/Note/master/GO/MIT6.824/imags/DDIA/8-Trasaction/利用多版本技术实现快照隔离级别.png)
 **一致性快照的可见性原则**
 
 1. 每个事务开始时列出当前进行的其他事务，然后忽略这些事务的部分写入，不管之后这些写入有没有可能被提交；
@@ -369,7 +369,7 @@ MySQL（InnoDB）和SQL Server里面都用两阶段加锁实现了串行化隔�
 **检测是否读取了过期的MVCC对象**
 在快照隔离级别时，事务从MVCC数据库一致性快照读取的时候，会忽略那些在创建快照时尚未提交的事务写入。比如下图，
 
-![7-10检测事务是否从MVCC快照中读取了旧值](https://raw.githubusercontent.com/qinggniq/Note/GO/MIT6.824/images/DDIA/8-Trasaction/检测事务是否从MVCC快照中读取了旧值.png)
+![7-10检测事务是否从MVCC快照中读取了旧值](https://raw.githubusercontent.com/qinggniq/Note/master/GO/MIT6.824/imags/DDIA/8-Trasaction/检测事务是否从MVCC快照中读取了旧值.png)
 
 事务 42 未提交，所以Alice查询的 `on_call` 的值是 `true` ，当事务 43 提交的时候，42 已经完成了提交，意思是之前快照读取时忽略的写入已经生效，并且直接导致事务 43 做决定的前提已经不再成立。
 
@@ -378,7 +378,7 @@ MySQL（InnoDB）和SQL Server里面都用两阶段加锁实现了串行化隔�
 **检测写是否影响了之前的读**
 第二种情况是，在一个事务读取了数据之后，另一个事务修改了数据，如下图：
 
-![7-11在可串行化的快照隔离中，检测事务是否修改了另一个事务的查询结果](https://raw.githubusercontent.com/qinggniq/Note/GO/MIT6.824/images/DDIA/8-Trasaction/检测事务是否修改了另一个事务的查询结果.png))
+![7-11在可串行化的快照隔离中，检测事务是否修改了另一个事务的查询结果](https://raw.githubusercontent.com/qinggniq/Note/master/GO/MIT6.824/imags/DDIA/8-Trasaction/检测事务是否修改了另一个事务的查询结果.png))
 
 在“两阶段加锁”中，有**索引区间锁**它可以锁定与某个查询条件匹配的所有行，这里使用了相似的技术，区别在于：SSI锁不会阻塞其他事务。
 
