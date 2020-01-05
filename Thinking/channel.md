@@ -1,4 +1,4 @@
-# Chnanels
+# Channels
 
 ## channel特性
 
