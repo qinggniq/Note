@@ -6,7 +6,6 @@
 2. 配置更改
 3. 预选举
 4. 快照、日志压缩
-5. 
 
 ```go
 type raftLog struct {
@@ -15,7 +14,6 @@ type raftLog struct {
 }
 
 func (l *raftLog) applyTo(idx int) {} 
-
 ```
 
 ```go
