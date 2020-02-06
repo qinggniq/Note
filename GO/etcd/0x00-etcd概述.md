@@ -21,7 +21,7 @@
 >
 > etcd is written in Go and **uses the [Raft](https://raft.github.io/) consensus algorithm** to manage a **highly-available replicated log**.
 
-这是**etcd**在GitHub上面的说明，首先它是一个键值数据库，其次它使用**[Raft](https://raft.github.io/) 共识算法**管理高可用的复制日志。所以**etcd**不仅仅是个键值数据库（如**redis**），也不仅仅是个**raft**库（只实现Raft算法），而是兼有之。由于要**etcd**要在分布式场景下使用，所以**网络**部分也是**etcd**需要实现的一部分。所以接下来的系列将会就：
+这是**etcd**在GitHub上面的说明，首先它是一个键值数据库，其次它使用**[Raft](https://raft.github.io/) 共识算法**管理高可用的复制日志。所以**etcd**不仅仅是个键值数据库（如**redis**），也不仅仅是个**raft**库（只实现Raft算法），而是兼有之，也就是高可用强一致性的分布式数据库。然而由于它的设计目的在于**集群元信息（配置、成员信息等）管理和分布式协调工作（分布式锁、租约等）**之类的数据量不大的场景，所以在存储方面**etcd**不适用于GB级别的数据存储。由于**etcd**要在分布式场景下使用，所以**网络**部分也是**etcd**需要实现的一部分。所以接下来的系列将会就：
 
 - Raft算法模块
 - 网络模块
@@ -41,3 +41,12 @@
 
 
 
+
+
+
+
+## pass
+
+为什么**etcd**叫**etcd**呢，项目中的[设计文档](https://github.com/etcd-io/etcd/blob/master/Documentation/learning/why.md)告诉了答案：
+
+> The name "etcd" originated from two ideas, the unix "/etc" folder and "d"istributed systems. The "/etc" folder is a place to store configuration data for a single system whereas etcd stores configuration information for large scale distributed systems. Hence, a "d"istributed "/etc" is "etcd".
